@@ -12,7 +12,16 @@
 [![Video](https://img.youtube.com/vi/XIVaB4ZJ2dY/default.jpg)](https://www.youtube.com/watch?v=XIVaB4ZJ2dY)
 
 [Watch the Video](https://youtu.be/XIVaB4ZJ2dY)
+## Installation
 
+After cloning this repository, migrate to `Project directory`. Then, follow the following steps:
+
+  Then run the following commands to run your app:
+
+```bash
+  flutter pub get
+  flutter run
+```
 <h2>🧐 Features</h2>
 
 Here're some of the project's best features:
