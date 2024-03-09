@@ -31,6 +31,7 @@ class AuthController extends GetxController {
       final NetworkResponse tokenResponse = await NetworkCaller().postRequest(
         Urls.token,
         body: {"username": phone.text.trim(), "password": password.text},
+        islogin: true,
       );
       log(tokenResponse.jsonResponse.toString());
       if (tokenResponse.isSuccess) {
@@ -38,7 +39,6 @@ class AuthController extends GetxController {
           tokenResponse.jsonResponse!['access'],
         );
 
-        log(tokenResponse.jsonResponse.toString());
         try {
           final NetworkResponse profileResponse =
               await NetworkCaller().getRequest(

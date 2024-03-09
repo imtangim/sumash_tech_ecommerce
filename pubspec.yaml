@@ -33,9 +33,7 @@ flutter:
   assets:
     - assets/logo/
     - assets/utilities/
-    - assets/slider/
-    - assets/images/
-    - assets/images/new_arrival/
+
 
   fonts:
     - family: popins

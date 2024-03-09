@@ -105,6 +105,8 @@ class SharedPreferenceController extends GetxController {
     token = null;
     user = null;
     bottomNavBarController.changeTab(0);
+    cartItem.clear();
+    count.value = 0;
     update();
   }
 

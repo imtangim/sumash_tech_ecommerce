@@ -7,12 +7,19 @@ import 'package:sumash_tech_project/controller/bottomnav_controller.dart';
 import 'package:sumash_tech_project/controller/shared_preference_controller.dart';
 import 'package:sumash_tech_project/utils/color_scheme.dart';
 
-class MainBottomNavBar extends StatelessWidget {
+class MainBottomNavBar extends StatefulWidget {
+  const MainBottomNavBar({super.key});
+
+  @override
+  State<MainBottomNavBar> createState() => _MainBottomNavBarState();
+}
+
+class _MainBottomNavBarState extends State<MainBottomNavBar> {
   final SharedPreferenceController sharedPreferenceController =
       Get.find<SharedPreferenceController>();
+
   final BottomNavBarController bottombarCOntroller =
       Get.find<BottomNavBarController>();
-  MainBottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +35,6 @@ class MainBottomNavBar extends StatelessWidget {
                 showSearch(
                   context: context,
                   delegate: SearchProductDelegates(),
-                  
                 );
               },
               icon: const Icon(Icons.search),
@@ -52,9 +58,10 @@ class MainBottomNavBar extends StatelessWidget {
             showUnselectedLabels: false,
             onTap: (value) {
               controller.changeTab(value);
+              setState(() {});
             },
             backgroundColor: Theme.of(context).colorScheme.primary,
-            selectedItemColor: Colors.white,
+            selectedItemColor: Colors.cyan,
             unselectedItemColor: Colors.white,
             type: BottomNavigationBarType.fixed,
             landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
@@ -108,10 +115,10 @@ class MainBottomNavBar extends StatelessWidget {
                 icon: Icon(Icons.person),
                 label: "",
               ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.earbuds),
-                label: "",
-              ),
+              // const BottomNavigationBarItem(
+              //   icon: Icon(Icons.earbuds),
+              //   label: "",
+              // ),
             ],
           );
         });

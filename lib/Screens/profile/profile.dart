@@ -14,7 +14,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int currentindex = 0;
+  
   @override
   Widget build(BuildContext context) {
     final AppLayout layout = AppLayout(context: context);

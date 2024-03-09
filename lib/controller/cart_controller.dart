@@ -27,62 +27,72 @@ class CartController extends GetxController {
   ) async {
     isloading = true;
     update();
-    bool alreadyInCart = sharedPreferenceController.user!.cartData!.any((item) {
-      return item.productID == int.parse(productID);
-    });
+    if (sharedPreferenceController.authState == true) {
+      bool alreadyInCart =
+          sharedPreferenceController.user!.cartData!.any((item) {
+        return item.productID == int.parse(productID);
+      });
 
-    if (alreadyInCart) {
-      isloading = false;
-      update();
-      showSnackMessage(context, "Product already in cart", Colors.orange);
-      return;
-    } else {
-      try {
-        final NetworkResponse cartResponse = await NetworkCaller().postRequest(
-          "${Urls.cart}/",
-          body: {
-            "product": productID,
-            "variant": null,
-            "quantity": quantity,
-          },
-        );
-        if (cartResponse.isSuccess) {
-          CartDataModel model = CartDataModel(
-            productID: cartResponse.jsonResponse!["product"],
-            quantity: cartResponse.jsonResponse!["quantity"],
-            variantID: cartResponse.jsonResponse?["variant"],
-          );
-          sharedPreferenceController.user!.cartData!.add(model);
-
-          sharedPreferenceController.saveUserInformation(UserModel(
-            cartData: sharedPreferenceController.user!.cartData,
-            customerId: sharedPreferenceController.user!.customerId,
-            dateOfBirth: sharedPreferenceController.user!.dateOfBirth,
-            dateOfBirthUpdated:
-                sharedPreferenceController.user!.dateOfBirthUpdated,
-            district: sharedPreferenceController.user!.district,
-            genderText: sharedPreferenceController.user!.genderText,
-            name: sharedPreferenceController.user!.name,
-            phoneNumber: sharedPreferenceController.user!.phoneNumber,
-            point: sharedPreferenceController.user!.point,
-            profilePhoto: sharedPreferenceController.user!.profilePhoto,
-            referralCode: sharedPreferenceController.user!.referralCode,
-            status: sharedPreferenceController.user!.status,
-          ));
-          sharedPreferenceController.cartItem.add(model);
-          sharedPreferenceController.count.value =
-              sharedPreferenceController.cartItem.length;
-
-          showSnackMessage(context, "Added to cart", Colors.green);
-        } else {
-          throw "Api error";
-        }
-      } catch (e) {
-        log(e.toString());
-      } finally {
+      if (alreadyInCart) {
         isloading = false;
         update();
+        showSnackMessage(context, "Product already in cart", Colors.orange);
+        return;
+      } else {
+        try {
+          final NetworkResponse cartResponse =
+              await NetworkCaller().postRequest(
+            "${Urls.cart}/",
+            body: {
+              "product": productID,
+              "variant": null,
+              "quantity": quantity,
+            },
+          );
+          if (cartResponse.isSuccess) {
+            CartDataModel model = CartDataModel(
+              productID: cartResponse.jsonResponse!["product"],
+              quantity: cartResponse.jsonResponse!["quantity"],
+              variantID: cartResponse.jsonResponse?["variant"],
+            );
+            sharedPreferenceController.user!.cartData!.add(model);
+
+            sharedPreferenceController.saveUserInformation(UserModel(
+              cartData: sharedPreferenceController.user!.cartData,
+              customerId: sharedPreferenceController.user!.customerId,
+              dateOfBirth: sharedPreferenceController.user!.dateOfBirth,
+              dateOfBirthUpdated:
+                  sharedPreferenceController.user!.dateOfBirthUpdated,
+              district: sharedPreferenceController.user!.district,
+              genderText: sharedPreferenceController.user!.genderText,
+              name: sharedPreferenceController.user!.name,
+              phoneNumber: sharedPreferenceController.user!.phoneNumber,
+              point: sharedPreferenceController.user!.point,
+              profilePhoto: sharedPreferenceController.user!.profilePhoto,
+              referralCode: sharedPreferenceController.user!.referralCode,
+              status: sharedPreferenceController.user!.status,
+            ));
+            sharedPreferenceController.cartItem.add(model);
+            sharedPreferenceController.count.value =
+                sharedPreferenceController.cartItem.length;
+
+            showSnackMessage(context, "Added to cart", Colors.green);
+          } else {
+            throw "Api error";
+          }
+        } catch (e) {
+          log(e.toString());
+          sharedPreferenceController.logout();
+        } finally {
+          isloading = false;
+          update();
+        }
       }
+    } else {
+      showSnackMessage(context, "Please login first", Colors.red);
+      isloading = false;
+
+      update();
     }
   }
 
