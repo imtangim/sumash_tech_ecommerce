@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initializePageData() async {
     await controller.fetchHomePageData();
     if (controller.homepageData != null) {
-      Get.offAll(() =>  MainBottomNavBar());
+      Get.offAll(() =>  const MainBottomNavBar());
     }
   }
 

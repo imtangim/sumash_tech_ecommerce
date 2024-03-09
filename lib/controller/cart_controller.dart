@@ -19,12 +19,11 @@ class CartController extends GetxController {
   bool isloading = false;
   SharedPreferenceController sharedPreferenceController =
       Get.put(SharedPreferenceController());
-  Future<void> addToCart(
-    String productID,
-    String? variantID,
-    String quantity,
-    BuildContext context,
-  ) async {
+
+  RxList<CartModel> cartFullItem = <CartModel>[].obs;
+  RxInt price = 0.obs;
+  Future<void> addToCart(String productID, String? variantID, String quantity,
+      BuildContext context) async {
     isloading = true;
     update();
     if (sharedPreferenceController.authState == true) {
@@ -76,6 +75,9 @@ class CartController extends GetxController {
             sharedPreferenceController.count.value =
                 sharedPreferenceController.cartItem.length;
 
+            await fetchProducts();
+
+            update();
             showSnackMessage(context, "Added to cart", Colors.green);
           } else {
             throw "Api error";
@@ -113,13 +115,26 @@ class CartController extends GetxController {
 
       if (cartResponse.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(cartResponse.body);
+        cartFullItem.clear();
+        price.value = 0;
 
         // Convert JSON data to List<CartModel>
         List<CartModel> products = jsonData.map((item) {
           return CartModel.fromJson(item);
         }).toList();
+        for (var element in products) {
+          cartFullItem.add(element);
+        }
 
-        return products;
+        for (var item in cartFullItem) {
+          log(item.price.toString());
+          log("Now price:${price.value}");
+          price.value += item.price!.toInt();
+        }
+        cartFullItem.refresh();
+        update();
+        log("Now price:$price");
+        return cartFullItem;
       } else {
         throw Exception('Failed to load products');
       }
@@ -152,12 +167,19 @@ class CartController extends GetxController {
             },
           );
           if (newResponse.statusCode == 204) {
+            cartFullItem.removeWhere((element) {
+              return element.product == int.parse(productID);
+            });
             sharedPreferenceController.user!.cartData!.removeWhere(
               (element) {
                 log("${element.productID} == ${int.parse(productID)}");
                 return element.productID == int.parse(productID);
               },
             );
+            price.value = 0;
+            for (var item in cartFullItem) {
+              price.value += item.price!.toInt();
+            }
 
             sharedPreferenceController.saveUserInformation(UserModel(
               cartData: sharedPreferenceController.user!.cartData,

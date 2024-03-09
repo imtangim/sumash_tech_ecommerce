@@ -15,7 +15,7 @@ class SharedPreferenceController extends GetxController {
   UserModel? user;
   SharedPreferences? _sharedPreferences;
   bool? authState;
-  List<CartDataModel> cartItem = <CartDataModel>[];
+  List<CartDataModel> cartItem = <CartDataModel>[].obs;
   RxInt count = <CartDataModel>[].length.obs;
 
   Future<void> initializePreferences() async {
