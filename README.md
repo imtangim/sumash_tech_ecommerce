@@ -1,4 +1,4 @@
-<h1 align="center" id="title">Chature - A simple Text Base app</h1>
+<h1 align="center" id="title">Sumashtech Job landing project</h1>
 
 <p align="center"><img src="https://socialify.git.ci/imtangim/sumash_tech_ecommerce/image?language=1&name=1&owner=1&pattern=Solid&stargazers=1&theme=Auto" alt="sumash_tech_ecommerce" width="640" height="320" /></p>
 
